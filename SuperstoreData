@@ -1,0 +1,43 @@
+SELECT *
+FROM DBO.SampleSuperstore
+
+--Total sales for each category
+SELECT Category, ROUND(SUM(Sales), 2, 1) as Total_sales
+FROM dbo.SampleSuperstore
+GROUP BY Category
+
+--Top 10 products by sales in the Offie Supplies category
+SELECT TOP 10 Sub_Category, ROUND(SUM(Sales), 2, 1) as Total_sales
+FROM dbo.SampleSuperstore
+WHERE Category = 'Office Supplies'
+GROUP BY Sub_Category
+ORDER BY Total_sales DESC
+
+--Total sales for each region
+SELECT Region, ROUND(SUM(Sales), 2, 1) as Total_sales
+FROM dbo.SampleSuperstore
+GROUP BY Region
+
+--Average discount by customer segment
+SELECT Segment, AVG(Discount) as AvgDiscount
+FROM dbo.SampleSuperstore
+GROUP BY Segment
+
+--The percentage of sales contributed by each sub-category in the furniture category
+SELECT Sub_Category, ROUND(SUM(Sales), 2, 1) as Total_sales, ROUND(SUM(Sales), 2, 1)/ (SELECT SUM(Sales) FROM dbo.SampleSuperstore WHERE Category = 'Furniture') * 100 as Percentage_sales
+FROM dbo.SampleSuperstore
+WHERE Category = 'Furniture'
+GROUP BY Sub_Category
+ORDER BY Percentage_sales DESC
+
+--Top 10 states with the highest qunatity sold
+SELECT TOP 10 State, count(Quantity) as Num_orders
+FROM dbo.SampleSuperstore
+GROUP BY State
+ORDER BY Num_orders DESC
+
+--Total loss for each category
+SELECT Category, ROUND(SUM(Profit), 2, 1) as total_loss
+FROM dbo.SampleSuperstore
+WHERE Profit < 0
+GROUP BY Category
